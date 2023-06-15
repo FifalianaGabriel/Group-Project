@@ -3,21 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.crud;
-import com.connectionToDatabase.ConnectionToDatabase;
+
+
 
 /**
  *
  * @author gabri
  */
 public class DonneesListeClient {
-    ConnectionToDatabase connection = new ConnectionToDatabase();
-    public int numeroCompte;
+    
+    public String numeroCompte;
     public String nom;
     public String prenoms;
     public String telephone;
     public String mail;
     
-    public DonneesListeClient(int numeroCompte, String nom, String prenoms, String telephone, String mail ){
+    public DonneesListeClient(String numeroCompte, String nom, String prenoms, String telephone, String mail ){
        
         this.numeroCompte = numeroCompte;
         this.nom = nom;
@@ -29,7 +30,7 @@ public class DonneesListeClient {
     
     //Méthodes d'accès getters
     
-    public int getNumeroCompte(){
+    public String getNumeroCompte(){
         return numeroCompte;
     }
     public String getNom(){
@@ -46,7 +47,7 @@ public class DonneesListeClient {
     }
     
     //Méthode setters
-    public void setNumeroCompte( int numeroCompte){
+    public void setNumeroCompte( String numeroCompte){
         this.numeroCompte = numeroCompte;
     }
     public void setNom(String nom){
@@ -61,5 +62,7 @@ public class DonneesListeClient {
     public void setMail(String mail){
         this.mail = mail;
     }
+    
+    
     
 }

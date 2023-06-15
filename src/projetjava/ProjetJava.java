@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package projetjava;
-
 import com.connectionToDatabase.ConnectionToDatabase;
-import com.client.ClientDesign;
+import com.crud.*;
+import com.design.*;
+import com.crud.GenererId;
 
 /**
  *
@@ -18,14 +19,14 @@ public class ProjetJava {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        
+       
         ConnectionToDatabase connection = new ConnectionToDatabase();
         connection.connect();
         
-        ClientDesign clientDesign = new ClientDesign();
-        
-        
-        
+        GenererId db = new GenererId();
+        //db.GenererId("FR002");
+        //System.out.println(db.prefixe);
+        //System.out.println(db.num);
         
         
     }
