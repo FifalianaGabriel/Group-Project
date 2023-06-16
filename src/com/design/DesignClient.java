@@ -21,6 +21,9 @@ public class DesignClient extends javax.swing.JFrame {
      */
     public DesignClient() {
         initComponents();
+        affichageInstantanee();
+        
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -34,6 +37,8 @@ public class DesignClient extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jTextFieldRechercher = new javax.swing.JTextField();
+        jLabelRechercher = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -99,6 +104,21 @@ public class DesignClient extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("PRÊT-TSIK");
 
+        jTextFieldRechercher.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jTextFieldRechercherInputMethodTextChanged(evt);
+            }
+        });
+        jTextFieldRechercher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldRechercherActionPerformed(evt);
+            }
+        });
+
+        jLabelRechercher.setText("Rechercher");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -106,14 +126,22 @@ public class DesignClient extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(128, 128, 128)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(954, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 646, Short.MAX_VALUE)
+                .addComponent(jLabelRechercher, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldRechercher, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextFieldRechercher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelRechercher, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1250, 100));
@@ -298,6 +326,11 @@ public class DesignClient extends javax.swing.JFrame {
             }
         });
         jTableAffichageClient.setFocusTraversalPolicyProvider(true);
+        jTableAffichageClient.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableAffichageClientMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableAffichageClient);
 
         jPanel5.setLayout(new java.awt.BorderLayout());
@@ -549,46 +582,49 @@ public class DesignClient extends javax.swing.JFrame {
 
     private void jButtonSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSupprimerActionPerformed
         // TODO add your handling code here:
+        
+        //Récuperation du rang de la ligne selectionnée
+        int numeroLigneSupprimer = jTableAffichageClient.getSelectedRow();
+        
+        //Récupération de la valeur de la colonne numeroCompte
+        String valeurNumeroCompte = jTableAffichageClient.getValueAt(numeroLigneSupprimer,0).toString();
+        
+        CrudClient crud = new CrudClient();
+        crud.supprimerClient(valeurNumeroCompte);
+        
+        
+        affichageInstantanee();
+        
+        JOptionPane.showMessageDialog(null,"Suppression du client reussie", "Information", JOptionPane.INFORMATION_MESSAGE );
+               
     }//GEN-LAST:event_jButtonSupprimerActionPerformed
 
     private void jButtonModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModifierActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButtonModifierActionPerformed
-
-    private void jButtonAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouterActionPerformed
-        // TODO add your handling code here:
         
-        // DEBUT AJOUT CLIENT
-        //Creation de l'objet ajoutClient de la classe Crud
-        CrudClient ajoutClient = new CrudClient();
-       
-        
-        //Conversion de l'objet JTextField en type String car la méthode ajoutClient attends des types String en arguments
-        
+        CrudClient crud = new CrudClient();
         
         String nom = jTextFieldNom.getText();
         String prenoms = jTextFieldPrenoms.getText();
         String telephone = jTextFieldTelephone.getText();
         String mail = jTextFieldMail.getText();
         
+        //Récupération de la valeur dans la colonne numeroClient
+        int numeroLigne = jTableAffichageClient.getSelectedRow();
+        
+        String numeroClientObtenu = jTableAffichageClient.getValueAt(numeroLigne,0).toString();
+        
+        crud.modifierClient(nom, prenoms, telephone, mail, numeroClientObtenu);
+        
+        affichageInstantanee();
+        
+        JOptionPane.showMessageDialog(null,"Modifcation du client reussie", "Information", JOptionPane.INFORMATION_MESSAGE );
                
-        ajoutClient.ajoutClient(nom, prenoms, telephone, mail);
+    }//GEN-LAST:event_jButtonModifierActionPerformed
+    //affichage après lancement de l'application
+    private void affichageInstantanee(){
         
-        //FIN AJOUT CLIENT
-        
-        
-        
-        
-        
-        //DEBUT AFFICHAGE DE LA LISTE DES CLIENTS
-        
-        
-        if(!jTextFieldNom.getText().isEmpty() && !jTextFieldPrenoms.getText().isEmpty() && !jTextFieldTelephone.getText().isEmpty() && !jTextFieldMail.getText().isEmpty()){
-            
-            JOptionPane.showMessageDialog(null,"Ajout du client reussie", "Information", JOptionPane.INFORMATION_MESSAGE );
-                
-            
-            CrudClient affichage = new CrudClient();
+        CrudClient affichage = new CrudClient();
             //Récupération des données(sous fomre de liste) dans  la DonneesLiteClient à partir de la méthode affichageClient()
             List<DonneesListeClient> listeClients = affichage.affichageClient();
         
@@ -607,6 +643,38 @@ public class DesignClient extends javax.swing.JFrame {
             //Mis à jour la table
             jTableAffichageClient.setModel(tableModel);
         
+        
+    }
+    
+    private void jButtonAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAjouterActionPerformed
+        // TODO add your handling code here:
+        
+        // DEBUT AJOUT CLIENT
+        //Creation de l'objet ajoutClient de la classe Crud
+        CrudClient ajoutClient = new CrudClient();
+       
+        
+        //Conversion de l'objet JTextField en type String car la méthode ajoutClient attends des types String en arguments
+        
+        String nom = jTextFieldNom.getText();
+        String prenoms = jTextFieldPrenoms.getText();
+        String telephone = jTextFieldTelephone.getText();
+        String mail = jTextFieldMail.getText();
+        
+        //FIN AJOUT CLIENT
+        
+        
+        
+        
+        
+        //DEBUT AFFICHAGE DE LA LISTE DES CLIENTS
+        
+        
+        if(!jTextFieldNom.getText().isEmpty() && !jTextFieldPrenoms.getText().isEmpty() && !jTextFieldTelephone.getText().isEmpty() && !jTextFieldMail.getText().isEmpty()){
+            
+            JOptionPane.showMessageDialog(null,"Ajout du client reussie", "Information", JOptionPane.INFORMATION_MESSAGE );
+           
+             ajoutClient.ajoutClient(nom, prenoms, telephone, mail);
         
         }else{
             JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs", "ATTENTION", JOptionPane.ERROR_MESSAGE);
@@ -667,6 +735,64 @@ public class DesignClient extends javax.swing.JFrame {
        new DesignRendrePret().setVisible(true);
        this.dispose();
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jTableAffichageClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableAffichageClientMouseClicked
+        // TODO add your handling code here:
+        
+        
+        //1er METHODE
+        
+        /*
+        DefaultTableModel model = (DefaultTableModel) jTableAffichageClient.getModel();
+        
+        //Récupération du rang de la ligne selection
+        int ligneCliquee = jTableAffichageClient.getSelectedRow();
+        
+        JOptionPane.showMessageDialog(null, jTableAffichageClient.getValueAt(ligneCliquee, 0));
+        
+        //Affichage des valeurs de JTable sur les champs de saisies
+        jTextFieldNom.setText(model.getValueAt(ligneCliquee,1).toString());
+        jTextFieldPrenoms.setText(model.getValueAt(ligneCliquee,2).toString());
+        jTextFieldTelephone.setText(model.getValueAt(ligneCliquee,3).toString());
+        jTextFieldMail.setText(model.getValueAt(ligneCliquee,4).toString());
+        
+        */
+        
+        //2eme méthode
+        
+        //Récupération du rang de la ligne selection
+        int ligneCliquee = jTableAffichageClient.getSelectedRow();
+        
+        
+        jTextFieldNom.setText(jTableAffichageClient.getValueAt(ligneCliquee, 1).toString());
+        jTextFieldPrenoms.setText(jTableAffichageClient.getValueAt(ligneCliquee, 2).toString());
+        jTextFieldTelephone.setText(jTableAffichageClient.getValueAt(ligneCliquee, 3).toString());
+        jTextFieldMail.setText(jTableAffichageClient.getValueAt(ligneCliquee, 4).toString());
+        
+        
+    }//GEN-LAST:event_jTableAffichageClientMouseClicked
+
+    private void jTextFieldRechercherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRechercherActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldRechercherActionPerformed
+
+    private void jTextFieldRechercherInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextFieldRechercherInputMethodTextChanged
+        // TODO add your handling code here:
+        
+        String numeroCompteRechercher = jTextFieldRechercher.getText();
+        String nomRechercher = jTextFieldRechercher.getText();
+        CrudClient crud = new CrudClient();
+        crud.rechercherClient(numeroCompteRechercher,nomRechercher);
+        
+        JOptionPane.showMessageDialog(null, "Recherche effectuee ", "RECHERCHE CLIENT", JOptionPane.INFORMATION_MESSAGE);
+        
+        affichageInstantanee();
+        
+    }//GEN-LAST:event_jTextFieldRechercherInputMethodTextChanged
+
+
+
+
 // Code pour changer de page////////////////////////////////////////////////////////////////////////////
     
     /**
@@ -741,6 +867,7 @@ public class DesignClient extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelRechercher;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -761,6 +888,7 @@ public class DesignClient extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldMail;
     private javax.swing.JTextField jTextFieldNom;
     private javax.swing.JTextField jTextFieldPrenoms;
+    private javax.swing.JTextField jTextFieldRechercher;
     private javax.swing.JTextField jTextFieldTelephone;
     // End of variables declaration//GEN-END:variables
 }

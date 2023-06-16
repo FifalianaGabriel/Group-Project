@@ -15,6 +15,8 @@ public class DesignRendrePret extends javax.swing.JFrame {
      */
     public DesignRendrePret() {
         initComponents();
+        
+        this.setLocationRelativeTo(null);
     }
 
     /**

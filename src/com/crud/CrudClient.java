@@ -78,13 +78,13 @@ public class CrudClient {
     public void ajoutClient( String nom, String prenoms,String telephone, String mail){
         
          connection.connect();
-        String idClient = Gerer();
+        String numeroCompteAutoIncremente = Gerer();
         
        
         String requeteAjoutClient = "INSERT INTO client(numerocompte, nom, prenoms, telephone, mail) VALUES (?,?,?,?,?);";
         
         try(PreparedStatement statement = connection.connect().prepareStatement(requeteAjoutClient)){
-                statement.setString(1, idClient);
+                statement.setString(1, numeroCompteAutoIncremente);
                 statement.setString(2,nom);
                 statement.setString(3,prenoms);
                 statement.setString(4,telephone);
@@ -106,7 +106,7 @@ public class CrudClient {
         //Création d'une liste de type DonneesListeClient
         List<DonneesListeClient> clients = new ArrayList<>();
         
-        String requeteAffichage = "SELECT * FROM client";
+        String requeteAffichage = "SELECT * FROM client ORDER BY numerocompte DESC";
         
         try(PreparedStatement statement = connection.connect().prepareStatement(requeteAffichage)){
             ResultSet resultat = statement.executeQuery();
@@ -132,28 +132,70 @@ public class CrudClient {
     }
     
     
-    public void modifierClient(){
+    public void modifierClient(String nom, String prenoms, String telephone, String mail, String numeroClientObtenu){
        
-        /*
+        
        connection.connect();
        
-       String requeteModifier = "UPDATE client SET nom =? prenoms=? telephone = ? mail= ? WHERE numeroCompte = ?";
+       String requeteModifier = "UPDATE client SET nom =? ,prenoms =?, telephone = ?, mail= ? WHERE numerocompte = ?";
        
        try(PreparedStatement statement = connection.connect().prepareStatement(requeteModifier)){
+           statement.setString(1,nom);
+           statement.setString(2, prenoms);
+           statement.setString(3, telephone);
+           statement.setString(4, mail);
+           statement.setString(5, numeroClientObtenu);
+           
+           statement.executeUpdate();
+           System.out.println("Mety ny modiifier");
            
            
            
        }catch(SQLException e){
            System.out.println(e.getMessage());
+           System.out.println("Modifier no bleme");
+           
        }
        
-*/
+
         
     }
-    public void supprimerClient(){
+    public void supprimerClient(String valeurNumeroCompte){
+        
+        connection.connect();
+        
+        String requeteSupprimer = "DELETE from client where numerocompte = ?";
+        
+        try(PreparedStatement statement = connection.connect().prepareStatement(requeteSupprimer)){
+            statement.setString(1,valeurNumeroCompte);
+            statement.executeUpdate();
+            System.out.println("Mety supprimer");
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            System.out.println("Supprimer tsy mety");
+        }
         
         
+    }
+    
+    public void rechercherClient(String numeroCompteObtenu, String nomObtenu){
+        connection.connect();
         
+        String requeteRechercher = "SELECT * FROM client where numerocompte like '%?%' OR nom like '%?%' ";
+        
+        
+        try(PreparedStatement statement = connection.connect().prepareStatement(requeteRechercher)){
+            statement.setString(1,numeroCompteObtenu);
+            statement.setString(2,nomObtenu);
+            
+            statement.executeUpdate();
+            
+            System.out.println("Mety ny recherche");
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            System.out.println("Tsy mety ny recherche");
+        }
     }
     
     

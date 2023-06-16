@@ -15,6 +15,7 @@ public class DesignVirement extends javax.swing.JFrame {
      */
     public DesignVirement() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

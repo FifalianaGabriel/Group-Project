@@ -15,6 +15,7 @@ public class DesignFairePret extends javax.swing.JFrame {
      */
     public DesignFairePret() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
