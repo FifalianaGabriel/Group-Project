@@ -6,9 +6,15 @@ package com.design;
 
 import com.crud.CrudClient;
 import com.crud.DonneesListeClient;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
 
 /**
  *
@@ -114,6 +120,14 @@ public class DesignClient extends javax.swing.JFrame {
         jTextFieldRechercher.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldRechercherActionPerformed(evt);
+            }
+        });
+        jTextFieldRechercher.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextFieldRechercherKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldRechercherKeyReleased(evt);
             }
         });
 
@@ -592,6 +606,15 @@ public class DesignClient extends javax.swing.JFrame {
         CrudClient crud = new CrudClient();
         crud.supprimerClient(valeurNumeroCompte);
         
+        // Effacer les textes sur les champs
+        jTextFieldNom.setText("");
+        jTextFieldPrenoms.setText("");
+        jTextFieldTelephone.setText("");
+        jTextFieldMail.setText("");
+        
+        
+        
+        
         
         affichageInstantanee();
         
@@ -616,7 +639,15 @@ public class DesignClient extends javax.swing.JFrame {
         
         crud.modifierClient(nom, prenoms, telephone, mail, numeroClientObtenu);
         
+        // Effacer les textes sur les champs
+        jTextFieldNom.setText("");
+        jTextFieldPrenoms.setText("");
+        jTextFieldTelephone.setText("");
+        jTextFieldMail.setText("");
+        
+        
         affichageInstantanee();
+        
         
         JOptionPane.showMessageDialog(null,"Modifcation du client reussie", "Information", JOptionPane.INFORMATION_MESSAGE );
                
@@ -667,6 +698,8 @@ public class DesignClient extends javax.swing.JFrame {
         
         
         
+        
+        
         //DEBUT AFFICHAGE DE LA LISTE DES CLIENTS
         
         
@@ -682,6 +715,12 @@ public class DesignClient extends javax.swing.JFrame {
         
         //FIN AFFICHAGE DE LA LISTE DES CLIENTS
         
+        
+        // Effacer les textes sur les champs
+        jTextFieldNom.setText("");
+        jTextFieldPrenoms.setText("");
+        jTextFieldTelephone.setText("");
+        jTextFieldMail.setText("");
         
         
         
@@ -771,24 +810,59 @@ public class DesignClient extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jTableAffichageClientMouseClicked
-
+    
+   
+    
+ 
     private void jTextFieldRechercherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRechercherActionPerformed
         // TODO add your handling code here:
+        
+        
+        
+        
     }//GEN-LAST:event_jTextFieldRechercherActionPerformed
-
+    
+    
+   
     private void jTextFieldRechercherInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTextFieldRechercherInputMethodTextChanged
         // TODO add your handling code here:
         
-        String numeroCompteRechercher = jTextFieldRechercher.getText();
-        String nomRechercher = jTextFieldRechercher.getText();
-        CrudClient crud = new CrudClient();
-        crud.rechercherClient(numeroCompteRechercher,nomRechercher);
-        
-        JOptionPane.showMessageDialog(null, "Recherche effectuee ", "RECHERCHE CLIENT", JOptionPane.INFORMATION_MESSAGE);
-        
-        affichageInstantanee();
+       
         
     }//GEN-LAST:event_jTextFieldRechercherInputMethodTextChanged
+
+    
+   
+    private void recherche(String requeteRecherche){
+        
+        DefaultTableModel model = (DefaultTableModel) jTableAffichageClient.getModel();
+        TableRowSorter<DefaultTableModel> table = new TableRowSorter<>(model);
+        jTableAffichageClient.setRowSorter(table);
+        
+        
+        table.setRowFilter(RowFilter.regexFilter(requeteRecherche));
+        
+        
+    }
+    
+    
+ 
+    private void jTextFieldRechercherKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldRechercherKeyPressed
+        // TODO add your handling code here:     
+        
+    }//GEN-LAST:event_jTextFieldRechercherKeyPressed
+
+    private void jTextFieldRechercherKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldRechercherKeyReleased
+        // TODO add your handling code here:
+        String chaine = jTextFieldRechercher.getText();
+        recherche(chaine);
+        
+        
+        if(jTextFieldRechercher.getText().isEmpty()){
+             affichageInstantanee();
+        }
+        
+    }//GEN-LAST:event_jTextFieldRechercherKeyReleased
 
 
 
@@ -892,3 +966,5 @@ public class DesignClient extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldTelephone;
     // End of variables declaration//GEN-END:variables
 }
+
+
